@@ -1,3 +1,5 @@
+import { updatePage } from "./logs.js";
+
 /** Locate me functionality */
 const locateMe = function(pos) {
     let a = "abcdefghijklmnopqrstuvwxyz"

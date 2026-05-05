@@ -13,7 +13,7 @@
     <meta content="" property="og:image" />
 
     <meta content='telephone=no' name='format-detection' />
-    <link href="assets/css/style.css" rel="stylesheet" />
+    <link href="assets/css/style.css?v=13" rel="stylesheet" />
 
 </head>
 <body>
@@ -120,46 +120,105 @@
                             <div id="my_locator_fonetic"></div>
                         </div>
                     </div>
-                    <div class="padded">
-                        <button id="log_reset">Clear Log</button>
-                    </div>
                 </div>
                 <hr>
-                <div class="centered" id="log_entry">
-                    <div><label>No.</label></div>
-                    <div><label for="log_time">Time</label></div>
-                    <div><label for="log_callsign">Callsign</label></div>
-                    <div><label for="log_loc">QTH</label></div>
-                    <div><label for="log_mode">Mode</label></div>
-                    <div><label for="log_tx_rst">Sent RST</label></div>
-                    <div><label for="log_rx_rst">Received RST</label></div>
-                    <div></div>
-                    <div><input id="log_edit" type="hidden" value="0"></div>
-                    <div><input class="short" id="log_time" type="text"></div>
-                    <div><input autofocus class="short" id="log_callsign" maxlength="10"
-                                style="text-transform:uppercase" type="text"></div>
-                    <div><input class="short" id="log_loc" maxlength="6" style="text-transform:uppercase" type="text">
+                <div class="log_toolbar">
+                    <div class="log_mode_switch">
+                        <button class="log_mode_button" data-log-view="live" id="log_view_live">Live QSO</button>
                     </div>
-                    <div>
-                        <select id="log_mode" class="short">
-                            <option value="0">Unknown</option>
-                            <option value="1">SSB</option>
-                            <option value="2">CW</option>
-                            <option value="5">AM</option>
-                            <option value="6" selected>FM</option>
-                            <option value="7">RTTY</option>
-                            <option value="8">SSTV</option>
-                        </select></div>
-                    <div><input class="short" id="log_tx_rst" maxlength="3" placeholder="59" type="text" value="59">
+                    <button class="log_clear_button" id="log_reset">Clear Log</button>
+                </div>
+                <div class="log_view active" data-log-view-panel="standard" id="log_standard_view">
+                    <input id="log_quick" type="hidden">
+                    <div class="centered" id="log_entry">
+                        <div><label>No.</label></div>
+                        <div><label for="log_time">Time</label></div>
+                        <div><label for="log_callsign">Callsign</label></div>
+                        <div><label for="log_loc">QTH</label></div>
+                        <div><label for="log_mode">Mode</label></div>
+                        <div><label for="log_tx_rst">Sent RST</label></div>
+                        <div><label for="log_rx_rst">Received RST</label></div>
+                        <div></div>
+                        <div><input id="log_edit" type="hidden" value="0"></div>
+                        <div><input class="short" id="log_time" type="text"></div>
+                        <div><input autofocus class="short" id="log_callsign" maxlength="10"
+                                    style="text-transform:uppercase" type="text"></div>
+                        <div><input class="short" id="log_loc" maxlength="6" style="text-transform:uppercase" type="text">
+                        </div>
+                        <div>
+                            <select id="log_mode" class="short">
+                                <option value="0">Unknown</option>
+                                <option value="1">SSB</option>
+                                <option value="2">CW</option>
+                                <option value="5">AM</option>
+                                <option value="6" selected>FM</option>
+                                <option value="7">RTTY</option>
+                                <option value="8">SSTV</option>
+                            </select></div>
+                        <div><input class="short" id="log_tx_rst" maxlength="3" placeholder="59" type="text" value="59">
+                        </div>
+                        <div><input class="short" id="log_rx_rst" maxlength="3" placeholder="59" type="text" value="59">
+                        </div>
+                        <div>
+                            <button class="short" id="log_write">&raquo;</button>
+                        </div>
                     </div>
-                    <div><input class="short" id="log_rx_rst" maxlength="3" placeholder="59" type="text" value="59">
-                    </div>
-                    <div>
-                        <button class="short" id="log_write">&raquo;</button>
+                    <hr>
+                    <div class="centered" id="log"></div>
+                </div>
+                <div class="log_view" data-log-view-panel="live" id="log_live_view">
+                    <div class="live_qso">
+                        <div class="live_qso_header">
+                            <button class="live_back_button" data-log-view="standard">Back</button>
+                            <div class="live_header_metrics">
+                                <span id="live_mode_name">FM</span>
+                                <span id="live_stat_time">--:--</span>
+                                <span><strong id="live_stat_count">0</strong> QSO</span>
+                            </div>
+                        </div>
+                        <div class="live_log" id="live_log"></div>
+                        <div class="live_composer_wrap">
+                            <div class="live_input_group">
+                                <div class="live_identity_bar">
+                                    <div class="live_my_identity">
+                                        <strong id="live_my_callsign"></strong>
+                                        <span id="live_my_callsign_fonetic"></span>
+                                    </div>
+                                    <div class="live_my_identity">
+                                        <strong id="live_my_locator"></strong>
+                                        <span id="live_my_locator_fonetic"></span>
+                                    </div>
+                                </div>
+                                <div class="live_preview" id="live_preview">
+                                    <div class="live_preview_card" data-preview-field="callsign">
+                                        <span class="live_preview_label">Callsign</span>
+                                        <input autocomplete="off" id="live_preview_callsign" spellcheck="false" type="text">
+                                    </div>
+                                    <div class="live_preview_card" data-preview-field="locator">
+                                        <span class="live_preview_label">Locator</span>
+                                        <input autocomplete="off" id="live_preview_locator" spellcheck="false" type="text">
+                                    </div>
+                                    <div class="live_preview_card" data-preview-field="rxrst">
+                                        <span class="live_preview_label">Received</span>
+                                        <input id="live_preview_rxrst" inputmode="numeric" maxlength="3" type="text" value="59">
+                                    </div>
+                                    <div class="live_preview_card" data-preview-field="txrst">
+                                        <span class="live_preview_label">Sent</span>
+                                        <input id="live_preview_txrst" inputmode="numeric" maxlength="3" type="text" value="59">
+                                    </div>
+                                </div>
+                                <div class="live_composer">
+                                    <button disabled id="live_quick_write">&#10003;</button>
+                                    <input id="live_quick" placeholder="callsign locator received sent" type="text">
+                                    <button id="live_quick_clear">&times;</button>
+                                </div>
+                            </div>
+                            <div class="live_composer_hint">
+                                The parser fills the fields automatically. Correct the data directly in the preview fields if needed.
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <hr>
-                <div class="centered" id="log"></div>
             </div>
             <div class="container tab" id="final_edi">
                 <label for="finalEDI" style="display:none">EDI</label>
@@ -187,6 +246,11 @@
                 <p>
                     <b>Callsigns</b> and <b>Locator</b> codes <u>do not</u> need to be
                     entered in capital letters, this is done automatically.
+                </p>
+                <p>
+                    <b>Quick entry</b> lets you type callsign, locator and RST values on one line.
+                    If the locator is a shorthand like <code>oe</code>, the app will try to expand it
+                    using your own locator.
                 </p>
                 <h3>
                     Modes:
@@ -297,7 +361,7 @@
     &copy; 2020-2025 ES1BBQ | v2025.02.18.001
 </footer>
 
-<script src="assets/js/main.js" type="module"></script>
+<script src="assets/js/main.js?v=13" type="module"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KQRD9B6RD8"></script>
 <script>
