@@ -106,13 +106,15 @@ const adjustLiveLogScroll = function (target = true) {
         }
     };
 
-    requestAnimationFrame(doScroll);
-    // Persistently update the scroll target as the entry animation expands the height
-    setTimeout(doScroll, 100);
-    setTimeout(doScroll, 250);
-    setTimeout(doScroll, 400);
-    setTimeout(doScroll, 600);
-    setTimeout(doScroll, 800);
+    // Ensure the element is visible and layout is stable before scrolling
+    requestAnimationFrame(function () {
+        doScroll();
+        // Multiple attempts to handle dynamic content height changes during animation
+        setTimeout(doScroll, 50);
+        setTimeout(doScroll, 150);
+        setTimeout(doScroll, 350);
+        setTimeout(doScroll, 600);
+    });
 };
 
 const renderLiveLog = function (records) {
@@ -169,6 +171,9 @@ const updateLiveStatusFromDraft = function () {
     const locatorCard = document.querySelector('[data-preview-field="locator"]');
     const rxCard = document.querySelector('[data-preview-field="rxrst"]');
     const txCard = document.querySelector('[data-preview-field="txrst"]');
+    
+    if (!callsignCard || !locatorCard || !rxCard || !txCard) return;
+
     const callsignValid = isValidCallsign(draft.callsign);
     callsignCard.classList.toggle('ready', hasCallsign && callsignValid);
     callsignCard.classList.toggle('invalid', hasCallsign && !callsignValid);
@@ -184,18 +189,20 @@ const updateLiveStatusFromDraft = function () {
         liveQso.classList.toggle('live-draft-duplicate', duplicateCount > 0);
     }
 
-    document.getElementById('live_quick_write').disabled = !isComplete;
+    const writeButton = document.getElementById('live_quick_write');
+    if (writeButton) writeButton.disabled = !isComplete;
     updateLiveInputState();
 };
 
 const updateLivePreview = function (rawValue) {
     const state = getQuickEntryState(rawValue, getStoredValue('PWWLo'), getQSORecords());
     const fields = getLivePreviewFields();
-    fields.callsign.value = state.parsed.callsign || '';
-    fields.locator.value = state.parsed.locator || '';
-    fields.rxRST.value = state.parsed.rxRST || '59';
-    fields.txRST.value = state.parsed.txRST || '59';
-    document.getElementById('live_mode_name').textContent = getSelectedModeName();
+    if (fields.callsign) fields.callsign.value = state.parsed.callsign || '';
+    if (fields.locator) fields.locator.value = state.parsed.locator || '';
+    if (fields.rxRST) fields.rxRST.value = state.parsed.rxRST || '59';
+    if (fields.txRST) fields.txRST.value = state.parsed.txRST || '59';
+    const modeNameEl = document.getElementById('live_mode_name');
+    if (modeNameEl) modeNameEl.textContent = getSelectedModeName();
     updateLiveStatusFromDraft();
 };
 
@@ -203,20 +210,28 @@ const setLogView = function (viewName, pushHistory = true) {
     currentLogView = viewName;
     localStorage['log_view_mode'] = viewName;
     document.body.classList.toggle('live-qso-active', viewName === 'live');
-    updateLiveViewportOffset();
+    
     document.querySelectorAll('[data-log-view]').forEach(function (button) {
         button.classList.toggle('active', button.getAttribute('data-log-view') === viewName);
     });
     document.querySelectorAll('[data-log-view-panel]').forEach(function (panel) {
         panel.classList.toggle('active', panel.getAttribute('data-log-view-panel') === viewName);
     });
+
+    updateLiveViewportOffset();
+
     if (viewName === 'live') {
         if (pushHistory) {
             history.pushState({ logView: 'live' }, '');
         }
-        document.getElementById('live_quick').focus();
+        requestAnimationFrame(function() {
+            const quickInput = document.getElementById('live_quick');
+            if (quickInput) quickInput.focus();
+            adjustLiveLogScroll(true);
+        });
     }
 };
+
 
 /** Method for updating log entries */
 export const refreshLogsTable = function () {

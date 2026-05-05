@@ -790,15 +790,23 @@ body.live-qso-active .log_toolbar {
     body.live-qso-active .live_qso {
         position: relative;
         gap: 0;
-        padding: max(0.55em, env(safe-area-inset-top)) 0.75em calc(9.5em + env(safe-area-inset-bottom) + var(--live-keyboard-offset));
+        padding: 0;
+        height: 100dvh;
         overflow: hidden;
     }
 
     body.live-qso-active .live_qso_header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 30;
+        background: var(--main-colorschema-wrapper-bg);
+        padding: max(0.55em, env(safe-area-inset-top)) 0.75em 0.55em;
+        margin-bottom: 0;
         flex-direction: row;
         align-items: center;
         gap: 0.55em;
-        margin-bottom: 0.55em;
     }
 
     body.live-qso-active .live_back_button {
@@ -810,6 +818,8 @@ body.live-qso-active .log_toolbar {
         gap: 0.35em;
         margin-left: auto;
         font-size: 0.9em;
+        flex-direction: row;
+        align-items: center;
     }
 
     body.live-qso-active .live_header_metrics span {
@@ -819,10 +829,10 @@ body.live-qso-active .log_toolbar {
 
     body.live-qso-active .live_log {
         position: fixed;
-        top: calc(max(0.55em, env(safe-area-inset-top)) + 3.15em);
+        top: calc(max(0.55em, env(safe-area-inset-top)) + 3.8em);
         left: 0.75em;
         right: 0.75em;
-        bottom: calc(12em + env(safe-area-inset-bottom) + var(--live-keyboard-offset));
+        bottom: calc(12.5em + env(safe-area-inset-bottom) + var(--live-keyboard-offset));
         z-index: 10;
         display: block;
         overflow-y: auto;
@@ -855,6 +865,9 @@ body.live-qso-active .log_toolbar {
         left: 0.65em;
         right: 0.65em;
         z-index: 25;
+        bottom: var(--live-keyboard-offset);
+        padding: 0.45em 0  max(0.55em, env(safe-area-inset-bottom));
+        background: linear-gradient(to top, var(--main-colorschema-wrapper-bg) 80%, rgba(24,24,24,0));
     }
 
     body.live-qso-active .live_preview {
@@ -875,12 +888,6 @@ body.live-qso-active .log_toolbar {
 
     body.live-qso-active .live_preview_card input {
         font-size: 0.95em;
-    }
-
-    body.live-qso-active .live_composer_wrap {
-        bottom: var(--live-keyboard-offset);
-        padding: 0.45em 0  max(0.55em, env(safe-area-inset-bottom));
-        background: linear-gradient(to top, var(--main-colorschema-wrapper-bg) 80%, rgba(24,24,24,0));
     }
 
     body.live-qso-active .live_input_group {
@@ -925,25 +932,6 @@ body.live-qso-active .log_toolbar {
     .log_clear_button {
         padding: 0.65em 0.5em;
         font-size: 0.9em;
-    }
-
-    .live_qso_header,
-    .live_log_main,
-    .live_log_meta {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .live_preview {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .live_input_group {
-        padding: 0.45em;
-    }
-
-    .live_composer input {
-        font-size: 1em;
     }
 }
 
@@ -1028,3 +1016,4 @@ label > button {
     background-color: var(--main-colorschema-red);
     color: var(--main-colorschema-fg);
 }
+
