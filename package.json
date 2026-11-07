@@ -1,0 +1,8 @@
+{
+  "name": "edi-log-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

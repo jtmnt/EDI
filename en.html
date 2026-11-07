@@ -13,15 +13,17 @@
     <meta content="" property="og:image" />
 
     <meta content='telephone=no' name='format-detection' />
-    <link href="assets/css/style.css?v=13" rel="stylesheet" />
+    <link href="assets/css/style.css?v=16" rel="stylesheet" />
 
 </head>
 <body>
+<script>try{if(localStorage.getItem("contest")==="minitest")document.body.classList.add("contest-minitest")}catch(e){}</script>
 
 
 <div id="application">
     <header>
-        <h1>EDI Generator for ES VUSHF Cup - 2025</h1>
+        <h1 class="ull-only">EDI Generator for ES VUSHF Cup - 2025</h1>
+        <h1 class="mt-only">ES LL KV minitest logger</h1>
         FYI: Uses only your Browser Local Storage to save your data.
         <div class="corner">
             <a href="index.html">Eesti keeles</a>
@@ -39,10 +41,20 @@
         <div class="tabs">
             <div class="container tab" id="edi_header">
                 <div class="centered">
+                    <label for="contest">Contest:</label>
+                    <select id="contest">
+                        <option value="ull">ULL KV (EDI)</option>
+                        <option value="minitest">LL KV minitest (Cabrillo)</option>
+                    </select>
+                </div>
+                <hr>
+                <div class="ull-only">
+                <div class="centered">
                     <label for="TDate">Date:</label>
                     <input id="TDate" type="date" placeholder="yyyy-mm-dd">
                 </div>
                 <hr>
+                </div>
                 <div class="centered">
                     <label for="PCall">Callsign:</label>
                     <input id="PCall" style="text-transform:uppercase" type="text">
@@ -51,6 +63,7 @@
                     <label for="RName">Name:</label>
                     <input id="RName" type="text">
                 </div>
+                <div class="ull-only">
                 <div class="centered">
                     <label for="PWWLo">Your QTH:
                         <button id="locate_me">&#8982;</button>
@@ -91,9 +104,74 @@
                     <label for="remarks">Remarks:</label>
                     <input id="remarks" type="text">
                 </div>
+                </div>
+                <div class="mt-only">
+                <hr>
+                <div class="centered">
+                    <label for="MT_name">Contest name (Cabrillo):</label>
+                    <input id="MT_name" type="text" value="ES-LL-KV">
+                </div>
+                <div class="centered">
+                    <label for="MT_class">Class:</label>
+                    <select id="MT_class">
+                        <option value="MIXED">MIXED</option>
+                        <option value="CW">CW</option>
+                        <option value="SSB">SSB</option>
+                    </select>
+                </div>
+                <div class="centered">
+                    <label for="MT_operator">Operators:</label>
+                    <select id="MT_operator">
+                        <option value="SINGLE-OP">Single operator</option>
+                        <option value="MULTI-OP">Multi operator</option>
+                    </select>
+                </div>
+                <div class="centered">
+                    <label for="MT_power">Power:</label>
+                    <select id="MT_power">
+                        <option value="LOW">LOW (up to 100 W)</option>
+                        <option value="QRP">QRP (up to 10 W)</option>
+                    </select>
+                </div>
+                <div class="centered">
+                    <label for="MT_youth">Youth (18 or younger):</label>
+                    <label class="switch">
+                        <input type="checkbox" id="MT_youth">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="centered">
+                    <label for="MT_age">Age:</label>
+                    <input id="MT_age" type="number" min="1" max="18">
+                </div>
+                <div class="centered">
+                    <label for="MT_club">Club station:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="MT_club">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <hr>
+                <div class="centered">
+                    <label for="MT_email">E-mail:</label>
+                    <input id="MT_email" type="email">
+                </div>
+                <div class="centered">
+                    <label for="MT_address">Address:</label>
+                    <input id="MT_address" type="text">
+                </div>
+                <div class="centered">
+                    <label for="MT_freq">Frequency (kHz, optional):</label>
+                    <input id="MT_freq" type="number" min="3500" max="3800" placeholder="3500">
+                </div>
+                <div class="centered">
+                    <label for="MT_soapbox">Remarks (soapbox):</label>
+                    <input id="MT_soapbox" type="text">
+                </div>
+            </div>
             </div>
             <div class="container tab" id="edi_log">
-                <div class="centered contest">
+                <div class="centered contest ull-only">
                     <label for="PSect">Band and Modus Operandi:</label>
                     <select id="PSect">
                         <option value="SIX-A">50 MHz All Mode</option>
@@ -107,7 +185,7 @@
                         <option value="0">Checklog</option>
                     </select>
                 </div>
-                <div class="centered">
+                <div class="centered ull-only">
                     <div class="my_info">
                         <div class="framed">
                             My Callsign:
@@ -121,14 +199,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="centered mt-only">
+                    <div class="my_info">
+                        <div class="framed">
+                            My Callsign:
+                            <div id="mt_my_callsign"></div>
+                            <div id="mt_my_callsign_fonetic"></div>
+                        </div>
+                    </div>
+                </div>
                 <hr>
-                <div class="log_toolbar">
+                <div class="log_toolbar ull-only">
                     <div class="log_mode_switch">
                         <button class="log_mode_button" data-log-view="live" id="log_view_live">Live QSO</button>
                     </div>
                     <button class="log_clear_button" id="log_reset">Clear Log</button>
                 </div>
-                <div class="log_view active" data-log-view-panel="standard" id="log_standard_view">
+                <div class="log_view active ull-only" data-log-view-panel="standard" id="log_standard_view">
                     <input id="log_quick" type="hidden">
                     <div class="centered" id="log_entry">
                         <div><label>No.</label></div>
@@ -166,7 +253,7 @@
                     <hr>
                     <div class="centered" id="log"></div>
                 </div>
-                <div class="log_view" data-log-view-panel="live" id="log_live_view">
+                <div class="log_view ull-only" data-log-view-panel="live" id="log_live_view">
                     <div class="live_qso">
                         <div class="live_qso_header">
                             <button class="live_back_button" data-log-view="standard">Back</button>
@@ -219,8 +306,105 @@
                         </div>
                     </div>
                 </div>
+                <div class="log_toolbar mt-only">
+                    <div class="log_mode_switch">
+                        <button class="log_mode_button" data-log-view="live" id="mt_view_live">Live QSO</button>
+                    </div>
+                    <button class="log_clear_button" id="mt_reset">Clear Log</button>
+                </div>
+                <div class="log_view active mt-only" data-log-view-panel="standard" id="mt_standard_view">
+                    <div class="mt_summary" id="mt_summary"></div>
+                    <div class="mt_entry" id="mt_entry">
+                        <div><label>No.</label></div>
+                        <div><label for="mt_time">Time (UTC)</label></div>
+                        <div><label for="mt_callsign">Callsign</label></div>
+                        <div><label for="mt_mode">Mode</label></div>
+                        <div><label for="mt_rst_sent">Sent RST</label></div>
+                        <div><label for="mt_nr_sent">Sent nr</label></div>
+                        <div><label for="mt_rst_rcvd">Rcvd RST</label></div>
+                        <div><label for="mt_nr_rcvd">Rcvd nr</label></div>
+                        <div></div>
+                        <div><input id="mt_edit" type="hidden" value="0"></div>
+                        <div><input class="short" id="mt_time" inputmode="numeric" maxlength="5" type="text"></div>
+                        <div><input class="short" id="mt_callsign" maxlength="13" style="text-transform:uppercase" type="text"></div>
+                        <div>
+                            <select class="short" id="mt_mode">
+                                <option value="CW">CW</option>
+                                <option value="SSB">SSB</option>
+                            </select>
+                        </div>
+                        <div><input class="short" id="mt_rst_sent" inputmode="numeric" maxlength="3" type="text"></div>
+                        <div><input class="short" id="mt_nr_sent" inputmode="numeric" maxlength="6" type="text"></div>
+                        <div><input class="short" id="mt_rst_rcvd" inputmode="numeric" maxlength="3" type="text"></div>
+                        <div><input class="short" id="mt_nr_rcvd" inputmode="numeric" maxlength="6" type="text"></div>
+                        <div>
+                            <button class="short" id="mt_write">&raquo;</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="centered" id="mt_log"></div>
+                </div>
+                <div class="log_view mt-only" data-log-view-panel="live" id="mt_live_view">
+                    <div class="live_qso" id="mt_live_qso">
+                        <div class="live_qso_header">
+                            <button class="live_back_button" data-log-view="standard">Back</button>
+                            <div class="live_header_metrics">
+                                <span id="mt_live_period">--</span>
+                                <span id="mt_live_clock">--:--</span>
+                            </div>
+                            <div class="mt_live_stats" id="mt_live_stats"></div>
+                        </div>
+                        <div class="live_log" id="mt_live_log"></div>
+                        <div class="live_composer_wrap">
+                            <div class="live_input_group">
+                                <div class="mt_mode_toggle">
+                                    <button id="mt_mode_cw" type="button">CW</button>
+                                    <button id="mt_mode_ssb" type="button">SSB</button>
+                                </div>
+                                <div class="mt_slots" id="mt_slots"></div>
+                                <div class="live_identity_bar">
+                                    <div class="live_my_identity">
+                                        <strong id="mt_live_my_callsign"></strong>
+                                        <span id="mt_live_my_callsign_fonetic"></span>
+                                    </div>
+                                </div>
+                                <div class="live_preview" id="mt_live_preview">
+                                    <div class="live_preview_card" data-preview-field="callsign">
+                                        <span class="live_preview_label">Callsign</span>
+                                        <input autocomplete="off" id="mt_preview_callsign" spellcheck="false" type="text">
+                                    </div>
+                                    <div class="live_preview_card" data-preview-field="rstrcvd">
+                                        <span class="live_preview_label">Rcvd RST</span>
+                                        <input id="mt_preview_rst_rcvd" inputmode="numeric" maxlength="3" type="text">
+                                    </div>
+                                    <div class="live_preview_card" data-preview-field="nrrcvd">
+                                        <span class="live_preview_label">Rcvd nr</span>
+                                        <input id="mt_preview_nr_rcvd" inputmode="numeric" maxlength="6" type="text">
+                                    </div>
+                                    <div class="live_preview_card" data-preview-field="rstsent">
+                                        <span class="live_preview_label">Sent RST</span>
+                                        <input id="mt_preview_rst_sent" inputmode="numeric" maxlength="3" type="text">
+                                    </div>
+                                    <div class="live_preview_card" data-preview-field="nrsent">
+                                        <span class="live_preview_label">Sent nr</span>
+                                        <input id="mt_preview_nr_sent" inputmode="numeric" maxlength="6" type="text">
+                                    </div>
+                                </div>
+                                <div class="live_composer">
+                                    <button disabled id="mt_quick_write">&#10003;</button>
+                                    <input autocomplete="off" id="mt_quick" placeholder="callsign [rst] number [cw|ssb]" type="text">
+                                    <button id="mt_quick_clear">&times;</button>
+                                </div>
+                            </div>
+                            <div class="live_composer_hint">
+                                Example: <code>es1xx 12</code> or <code>es1xx 579 12</code>; <code>cw</code>/<code>ssb</code> switches the mode. The sent number is filled in automatically.
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="container tab" id="final_edi">
+                <div class="ull-only">
                 <label for="finalEDI" style="display:none">EDI</label>
                 <div class="centered">
                     <textarea name="logifail" id="finalEDI"></textarea>
@@ -229,8 +413,23 @@
                     <a href="#" id="downloadEDI" class="button">Download log.edi</a>
                     <a href="#" id="postEDI" class="button">Transmit log</a>
                 </div>
+                </div>
+                <div class="mt-only">
+                    <label for="finalCabrillo" style="display:none">Cabrillo</label>
+                    <div class="centered">
+                        <textarea name="cabrillo" id="finalCabrillo"></textarea>
+                    </div>
+                    <div class="centered">
+                        <a href="#" id="downloadCabrillo" class="button">Download minitest.log</a>
+                    </div>
+                    <p class="centered">
+                        Upload the log at <a href="https://minitest.erau.ee/" target="_blank" rel="noopener">minitest.erau.ee</a>
+                        or e-mail it to <a href="mailto:minitest@erau.ee" id="mailCabrillo">minitest@erau.ee</a>
+                    </p>
+                </div>
             </div>
             <div class="container tab" id="help">
+                <div class="ull-only">
 
                 <h2>Log Entry</h2>
                 <p>
@@ -323,8 +522,20 @@
                     <b>Callsign</b> and <b>Locator</b> code <u>do not</u> need to be
                     entered in capital letters, this is done automatically.
                 </p>
+                </div>
+                <div class="mt-only">
+                    <h2>LL KV minitest</h2>
+                    <p>In minitest mode QSOs are stored with UTC time and the period (1-4) is calculated from the time in Estonian local time. The sent serial number is filled in automatically (highest existing + 1) and can be edited.</p>
+                    <p><b>Quick entry:</b> <code>es1xx 12</code> (callsign and received number), <code>es1xx 579 12</code> (received RST and number). The word <code>cw</code>, <code>ssb</code> or <code>ph</code> switches the mode. Default RST is 599 for CW and 59 for SSB.</p>
+                    <p>A duplicate is the same callsign, the same mode and the same period. Duplicates are yellow in the log, Live QSO asks for confirmation and they do not count for points. A CW QSO is worth 2 points, an SSB QSO 1 point.</p>
+                    <p>The Result tab holds the Cabrillo log. Download it and upload it at minitest.erau.ee or send it by e-mail. The frequency is written as 3500 unless a frequency is set in Settings.</p>
+                </div>
             </div>
             <div class="container tab" id="changelog">
+                <h2>v2026.11.07.001</h2>
+                <p>
+                    <u>Added LL KV minitest mode!</u> Pick the contest in Settings (ULL KV EDI or LL KV minitest). Minitest mode: quick entry, automatic period and sent serial number, duplicate check, score and Cabrillo log download.
+                </p>
                 <h2>v2025.02.18.001</h2>
                 <p>
                     Added 70mhz.
@@ -358,10 +569,11 @@
 
         </div>
     </div>
-    &copy; 2020-2025 ES1BBQ | v2025.02.18.001
+    &copy; 2020-2025 ES1BBQ | v2026.11.07.001
+    <br>Customised by ES2ICE (Live QSO, minitest) · <a href="https://github.com/jtmnt/EDI/tree/feature/minitest" target="_blank" rel="noopener">source</a> · original: <a href="https://log.es1bbq.eu" target="_blank" rel="noopener">log.es1bbq.eu</a>
 </footer>
 
-<script src="assets/js/main.js?v=13" type="module"></script>
+<script src="assets/js/main.js?v=14" type="module"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KQRD9B6RD8"></script>
 <script>
